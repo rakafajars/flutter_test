@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/theme/app_colors.dart';
+
 class ChatMessage {
   final String text;
   final String? imageUrl;
@@ -32,8 +34,12 @@ class ChatBubble extends StatelessWidget {
           if (!message.isUser) ...[
             const CircleAvatar(
               radius: 16,
-              backgroundColor: Color(0xFFE1BEE7),
-              child: Icon(Icons.smart_toy, size: 18, color: Color(0xFF7B1FA2)),
+              backgroundColor: AppColors.primaryLight,
+              child: Icon(
+                Icons.smart_toy,
+                size: 18,
+                color: AppColors.primaryDark,
+              ),
             ),
             const SizedBox(width: 8),
           ],
@@ -50,7 +56,7 @@ class ChatBubble extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: message.isUser
-                        ? const Color(0xFF7B1FA2)
+                        ? AppColors.primaryDark
                         : Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: const Radius.circular(16),
@@ -106,7 +112,7 @@ class ChatBubble extends StatelessWidget {
                   _formatTime(message.time),
                   style: const TextStyle(
                     fontSize: 11,
-                    color: Color(0xFF999999),
+                    color: AppColors.textHint,
                   ),
                 ),
               ],

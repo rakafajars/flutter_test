@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../core/theme/app_colors.dart';
 import '../../models/article.dart';
 import '../../routes/app_routes.dart';
 
@@ -14,7 +15,7 @@ class NewsDetailView extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.toNamed(AppRoutes.chat),
-        backgroundColor: const Color(0xFF9C27B0),
+        backgroundColor: AppColors.primary,
         child: const Icon(Icons.chat_bubble, color: Colors.white),
       ),
       body: SingleChildScrollView(
@@ -86,7 +87,7 @@ class NewsDetailView extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333),
+                      color: AppColors.textPrimary,
                       height: 1.3,
                     ),
                   ),
@@ -98,7 +99,7 @@ class NewsDetailView extends StatelessWidget {
                           '${article.source} • ${article.timeAgo}',
                           style: const TextStyle(
                             fontSize: 14,
-                            color: Color(0xFF999999),
+                            color: AppColors.textHint,
                           ),
                         ),
                       ),
@@ -108,7 +109,7 @@ class NewsDetailView extends StatelessWidget {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFFF5722),
+                          color: AppColors.accentOrange,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Text(
@@ -128,7 +129,7 @@ class NewsDetailView extends StatelessWidget {
                       article.description,
                       style: const TextStyle(
                         fontSize: 16,
-                        color: Color(0xFF666666),
+                        color: AppColors.textSecondary,
                         height: 1.6,
                       ),
                     ),

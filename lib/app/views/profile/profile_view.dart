@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/profile_controller.dart';
+import '../../core/theme/app_colors.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -12,7 +13,7 @@ class ProfileView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF9C27B0),
+        backgroundColor: AppColors.primary,
         foregroundColor: Colors.white,
         title: const Text('Profile'),
         leading: IconButton(
@@ -27,11 +28,7 @@ class ProfileView extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(32),
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [Color(0xFF9C27B0), Color(0xFF7B1FA2)],
-                ),
+                gradient: AppColors.primaryGradientVertical,
               ),
               child: Column(
                 children: [
@@ -45,7 +42,7 @@ class ProfileView extends StatelessWidget {
                         ? const Icon(
                             Icons.person,
                             size: 50,
-                            color: Color(0xFF9C27B0),
+                            color: AppColors.primary,
                           )
                         : null,
                   ),
@@ -104,10 +101,12 @@ class ProfileView extends StatelessWidget {
                 ],
               ),
             ),
-
             ListTile(
-              leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text('Logout', style: TextStyle(color: Colors.red)),
+              leading: const Icon(Icons.logout, color: AppColors.error),
+              title: const Text(
+                'Logout',
+                style: TextStyle(color: AppColors.error),
+              ),
               onTap: () => controller.signOut(),
             ),
           ],

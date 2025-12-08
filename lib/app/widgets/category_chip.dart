@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../core/theme/app_colors.dart';
+
 class CategoryChip extends StatelessWidget {
   final String label;
   final bool isSelected;
@@ -22,13 +24,13 @@ class CategoryChip extends StatelessWidget {
           label: Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.white : const Color(0xFF7B1FA2),
+              color: isSelected ? Colors.white : AppColors.primaryDark,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           backgroundColor: isSelected
-              ? const Color(0xFFFF9800)
-              : const Color(0xFFE1BEE7),
+              ? AppColors.accent
+              : AppColors.primaryLight,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

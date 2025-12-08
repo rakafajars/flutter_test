@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/splash_controller.dart';
+import '../../core/theme/app_colors.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({super.key});
@@ -14,11 +15,7 @@ class SplashView extends StatelessWidget {
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF9C27B0), Color(0xFF7B1FA2)],
-          ),
+          gradient: AppColors.primaryGradientVertical,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +37,7 @@ class SplashView extends StatelessWidget {
               child: const Icon(
                 Icons.newspaper,
                 size: 60,
-                color: Color(0xFF9C27B0),
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 32),

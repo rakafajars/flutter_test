@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/home_controller.dart';
+import '../../core/theme/app_colors.dart';
 import '../../routes/app_routes.dart';
 import '../../widgets/category_chip.dart';
 import '../../widgets/news_card.dart';
@@ -22,11 +23,7 @@ class HomeView extends StatelessWidget {
               bottom: 20,
             ),
             decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF7B1FA2), Color(0xFF9C27B0)],
-              ),
+              gradient: AppColors.primaryGradient,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(24),
                 bottomRight: Radius.circular(24),
@@ -109,7 +106,7 @@ class HomeView extends StatelessWidget {
             child: Obx(() {
               if (controller.isLoading.value && controller.articles.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(color: Color(0xFF9C27B0)),
+                  child: CircularProgressIndicator(color: AppColors.primary),
                 );
               }
 
@@ -123,13 +120,15 @@ class HomeView extends StatelessWidget {
                         const Icon(
                           Icons.error_outline,
                           size: 48,
-                          color: Color(0xFF999999),
+                          color: AppColors.textHint,
                         ),
                         const SizedBox(height: 16),
                         Text(
                           controller.errorMessage.value,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(color: Color(0xFF666666)),
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
@@ -146,14 +145,14 @@ class HomeView extends StatelessWidget {
                 return const Center(
                   child: Text(
                     'No news available',
-                    style: TextStyle(color: Color(0xFF666666)),
+                    style: TextStyle(color: AppColors.textSecondary),
                   ),
                 );
               }
 
               return RefreshIndicator(
                 onRefresh: () => controller.refreshNews(),
-                color: const Color(0xFF9C27B0),
+                color: AppColors.primary,
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: controller.articles.length,

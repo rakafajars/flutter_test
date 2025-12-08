@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/chat_controller.dart';
+import '../../core/theme/app_colors.dart';
 import '../../widgets/chat_bubble.dart';
 
 class ChatView extends StatelessWidget {
@@ -26,7 +27,7 @@ class ChatView extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
@@ -38,8 +39,12 @@ class ChatView extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 18,
-              backgroundColor: Color(0xFFE1BEE7),
-              child: Icon(Icons.smart_toy, size: 20, color: Color(0xFF7B1FA2)),
+              backgroundColor: AppColors.primaryLight,
+              child: Icon(
+                Icons.smart_toy,
+                size: 20,
+                color: AppColors.primaryDark,
+              ),
             ),
             const SizedBox(width: 12),
             Column(
@@ -60,7 +65,7 @@ class ChatView extends StatelessWidget {
                         : 'Online - Typically replies in minutes',
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Color(0xFF999999),
+                      color: AppColors.textHint,
                     ),
                   ),
                 ),
@@ -107,20 +112,20 @@ class ChatView extends StatelessWidget {
                         'https://picsum.photos/200/150?random=${DateTime.now().millisecondsSinceEpoch}',
                       );
                     },
-                    icon: const Icon(Icons.image, color: Color(0xFF999999)),
+                    icon: const Icon(Icons.image, color: AppColors.textHint),
                   ),
                   Expanded(
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F5F5),
+                        color: AppColors.background,
                         borderRadius: BorderRadius.circular(24),
                       ),
                       child: TextField(
                         controller: textController,
                         decoration: const InputDecoration(
                           hintText: 'Write your message...',
-                          hintStyle: TextStyle(color: Color(0xFF999999)),
+                          hintStyle: TextStyle(color: AppColors.textHint),
                           border: InputBorder.none,
                         ),
                         onSubmitted: (text) {
@@ -143,7 +148,7 @@ class ChatView extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: const BoxDecoration(
-                        color: Color(0xFF7B1FA2),
+                        color: AppColors.primaryDark,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
