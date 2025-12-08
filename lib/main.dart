@@ -5,18 +5,17 @@ import 'package:get/get.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/services/auth_service.dart';
+import 'app/services/connectivity_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables
   await dotenv.load(fileName: '.env');
 
-  // Initialize Firebase
   await Firebase.initializeApp();
 
-  // Register AuthService globally
   Get.put(AuthService());
+  Get.put(ConnectivityService());
 
   runApp(const MyApp());
 }
@@ -27,10 +26,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Social Login App',
+      title: 'Top News',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF9C27B0)),
         useMaterial3: true,
       ),
       initialRoute: AppPages.initial,

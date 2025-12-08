@@ -6,21 +6,37 @@ import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../core/database/dao/chat_message_dao.dart';
 import '../core/theme/app_colors.dart';
+import '../services/connectivity_service.dart';
 import '../widgets/chat_bubble.dart';
 
 class ChatController extends GetxController {
   final RxList<ChatMessage> messages = <ChatMessage>[].obs;
   final RxBool isTyping = false.obs;
   final ImagePicker _imagePicker = ImagePicker();
+  final ChatMessageDao _chatMessageDao = ChatMessageDao();
+  final ConnectivityService _connectivityService =
+      Get.find<ConnectivityService>();
 
   GenerativeModel? _model;
   ChatSession? _chatSession;
 
+  bool get isOffline => !_connectivityService.isOnline.value;
+
   @override
   void onInit() {
     super.onInit();
+    _loadCachedMessages();
     _initGemini();
+  }
+
+  Future<void> _loadCachedMessages() async {
+    final cachedMessages = await _chatMessageDao.getAllMessages();
+    if (cachedMessages.isNotEmpty) {
+      messages.addAll(cachedMessages);
+      debugPrint('Loaded ${cachedMessages.length} messages from cache');
+    }
   }
 
   void _initGemini() {
@@ -52,7 +68,20 @@ class ChatController extends GetxController {
   Future<void> sendMessage(String text, {String? imagePath}) async {
     if (text.isEmpty && imagePath == null) return;
 
-    messages.add(ChatMessage(text: text, imagePath: imagePath, isUser: true));
+    final userMessage = ChatMessage(
+      text: text,
+      imagePath: imagePath,
+      isUser: true,
+    );
+    messages.add(userMessage);
+    await _chatMessageDao.insertMessage(userMessage);
+
+    if (isOffline) {
+      _addBotMessage(
+        'You are offline. Messages will be sent when you reconnect.',
+      );
+      return;
+    }
 
     await _getGeminiResponse(text, imagePath: imagePath);
   }
@@ -100,8 +129,15 @@ class ChatController extends GetxController {
     }
   }
 
-  void _addBotMessage(String text) {
-    messages.add(ChatMessage(text: text, isUser: false));
+  Future<void> _addBotMessage(String text) async {
+    final botMessage = ChatMessage(text: text, isUser: false);
+    messages.add(botMessage);
+    await _chatMessageDao.insertMessage(botMessage);
+  }
+
+  Future<void> clearChatHistory() async {
+    messages.clear();
+    await _chatMessageDao.deleteAllMessages();
   }
 
   Future<void> pickImageFromGallery() async {

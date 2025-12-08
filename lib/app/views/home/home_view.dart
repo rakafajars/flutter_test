@@ -102,6 +102,27 @@ class HomeView extends StatelessWidget {
               ],
             ),
           ),
+          Obx(() {
+            if (controller.isOfflineMode.value) {
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                color: Colors.orange.shade700,
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.wifi_off, color: Colors.white, size: 16),
+                    SizedBox(width: 8),
+                    Text(
+                      'Offline Mode - Showing cached data',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
           Expanded(
             child: Obx(() {
               if (controller.isLoading.value && controller.articles.isEmpty) {

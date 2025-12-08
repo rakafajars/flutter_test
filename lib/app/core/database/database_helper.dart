@@ -1,0 +1,54 @@
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DatabaseHelper {
+  static final DatabaseHelper instance = DatabaseHelper._init();
+  static Database? _database;
+
+  DatabaseHelper._init();
+
+  Future<Database> get database async {
+    if (_database != null) return _database!;
+    _database = await _initDB('news_app.db');
+    return _database!;
+  }
+
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
+
+    return await openDatabase(path, version: 1, onCreate: _createDB);
+  }
+
+  Future<void> _createDB(Database db, int version) async {
+    await db.execute('''
+      CREATE TABLE articles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        url TEXT,
+        imageUrl TEXT,
+        source TEXT,
+        publishedAt TEXT,
+        category TEXT,
+        createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE chat_messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        text TEXT,
+        imagePath TEXT,
+        isUser INTEGER NOT NULL,
+        time TEXT NOT NULL,
+        createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+      )
+    ''');
+  }
+
+  Future<void> close() async {
+    final db = await instance.database;
+    db.close();
+  }
+}
