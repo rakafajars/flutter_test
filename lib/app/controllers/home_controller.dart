@@ -8,6 +8,8 @@ import '../services/news_api_service.dart';
 class HomeController extends GetxController {
   final AuthService _authService = Get.find<AuthService>();
 
+  bool get isGuest => _authService.currentUser?.isAnonymous ?? true;
+
   final NewsApiService _newsApiService = NewsApiService();
 
   final RxList<Article> articles = <Article>[].obs;
