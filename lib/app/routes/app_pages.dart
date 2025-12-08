@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:test_project/app/views/home/home_view.dart';
+import 'package:test_project/app/views/news_detail/news_detail_view.dart';
 
 import '../bindings/auth_binding.dart';
 import '../views/login/login_view.dart';
@@ -15,5 +16,6 @@ class AppPages {
       binding: AuthBinding(),
     ),
     GetPage(name: AppRoutes.home, page: () => const HomeView()),
+    GetPage(name: AppRoutes.newsDetail, page: () => const NewsDetailView()),
   ];
 }

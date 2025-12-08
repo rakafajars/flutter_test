@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
 import '../../widgets/category_chip.dart';
 import '../../widgets/news_card.dart';
 
@@ -99,7 +101,7 @@ class HomeView extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
-              children: const [
+              children: [
                 NewsCard(
                   title:
                       'Government announces new plan to support small businesses',
@@ -107,6 +109,12 @@ class HomeView extends StatelessWidget {
                   time: '2h ago',
                   imageUrl: 'https://picsum.photos/400/200?random=1',
                   isFeatured: true,
+                  onTap: () => _navigateToDetail(
+                    'Government announces new plan to support small businesses',
+                    'The News',
+                    '2h ago',
+                    'https://picsum.photos/400/200?random=1',
+                  ),
                 ),
                 NewsCard(
                   title:
@@ -114,6 +122,12 @@ class HomeView extends StatelessWidget {
                   source: 'Daily Post',
                   time: '4h ago',
                   imageUrl: 'https://picsum.photos/400/200?random=2',
+                  onTap: () => _navigateToDetail(
+                    'New technology is transforming the renewable energy sector',
+                    'Daily Post',
+                    '4h ago',
+                    'https://picsum.photos/400/200?random=2',
+                  ),
                 ),
                 NewsCard(
                   title:
@@ -121,6 +135,12 @@ class HomeView extends StatelessWidget {
                   source: 'National Times',
                   time: '6h ago',
                   imageUrl: 'https://picsum.photos/400/200?random=3',
+                  onTap: () => _navigateToDetail(
+                    'Political leaders meet to discuss recent policy changes',
+                    'National Times',
+                    '6h ago',
+                    'https://picsum.photos/400/200?random=3',
+                  ),
                 ),
                 NewsCard(
                   title:
@@ -128,12 +148,35 @@ class HomeView extends StatelessWidget {
                   source: 'Global News',
                   time: '12h ago',
                   imageUrl: 'https://picsum.photos/400/200?random=4',
+                  onTap: () => _navigateToDetail(
+                    'Economy shows signs of recovery after a year of challenges',
+                    'Global News',
+                    '12h ago',
+                    'https://picsum.photos/400/200?random=4',
+                  ),
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _navigateToDetail(
+    String title,
+    String source,
+    String time,
+    String imageUrl,
+  ) {
+    Get.toNamed(
+      AppRoutes.newsDetail,
+      arguments: {
+        'title': title,
+        'source': source,
+        'time': time,
+        'imageUrl': imageUrl,
+      },
     );
   }
 }
