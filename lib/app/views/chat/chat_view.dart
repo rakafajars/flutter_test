@@ -107,11 +107,7 @@ class ChatView extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      controller.sendImage(
-                        'https://picsum.photos/200/150?random=${DateTime.now().millisecondsSinceEpoch}',
-                      );
-                    },
+                    onPressed: () => controller.showImagePickerOptions(),
                     icon: const Icon(Icons.image, color: AppColors.textHint),
                   ),
                   Expanded(

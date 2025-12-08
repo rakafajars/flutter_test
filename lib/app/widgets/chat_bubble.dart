@@ -1,16 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 
 class ChatMessage {
   final String text;
-  final String? imageUrl;
+  final String? imagePath;
   final bool isUser;
   final DateTime time;
 
   ChatMessage({
     required this.text,
-    this.imageUrl,
+    this.imagePath,
     required this.isUser,
     DateTime? time,
   }) : time = time ?? DateTime.now();
@@ -75,11 +77,11 @@ class ChatBubble extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (message.imageUrl != null) ...[
+                      if (message.imagePath != null) ...[
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.network(
-                            message.imageUrl!,
+                          child: Image.file(
+                            File(message.imagePath!),
                             width: 200,
                             height: 150,
                             fit: BoxFit.cover,
