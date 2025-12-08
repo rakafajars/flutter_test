@@ -10,7 +10,18 @@ class NewsDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final article = Get.arguments as Article;
+    final article = Get.arguments as Article?;
+
+    if (article == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          foregroundColor: Colors.white,
+          title: const Text('Error'),
+        ),
+        body: const Center(child: Text('Article not found')),
+      );
+    }
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
