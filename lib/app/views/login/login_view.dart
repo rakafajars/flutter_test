@@ -12,15 +12,12 @@ class LoginView extends GetView<AuthController> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.blue.shade900,
-              Colors.blue.shade600,
-              Colors.blue.shade400,
-            ],
+            colors: [Color(0xFF9C27B0), Color(0xFFE1BEE7), Colors.white],
+            stops: [0.0, 0.4, 0.7],
           ),
         ),
         child: SafeArea(
@@ -30,35 +27,44 @@ class LoginView extends GetView<AuthController> {
               children: [
                 const Spacer(flex: 2),
                 Container(
-                  padding: const EdgeInsets.all(24),
+                  width: 180,
+                  height: 180,
                   decoration: BoxDecoration(
-                    color: Colors.white.withAlpha(51),
-                    shape: BoxShape.circle,
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xFFFF9800), Color(0xFFFFB74D)],
+                    ),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.orange.withAlpha(100),
+                        blurRadius: 30,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
                   ),
                   child: const Icon(
-                    Icons.lock_open_rounded,
+                    Icons.menu_book_rounded,
                     size: 80,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 48),
                 const Text(
                   'Welcome',
                   style: TextStyle(
-                    fontSize: 36,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Color(0xFF333333),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Text(
-                  'Sign in to continue',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white.withAlpha(204),
-                  ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Sign in to your account',
+                  style: TextStyle(fontSize: 16, color: Color(0xFF666666)),
                 ),
-                const Spacer(flex: 2),
+                const SizedBox(height: 48),
                 Obx(
                   () => Column(
                     children: [
@@ -80,33 +86,35 @@ class LoginView extends GetView<AuthController> {
                         text: 'Sign in with Google',
                         backgroundColor: Colors.white,
                         textColor: Colors.black87,
+                        borderColor: const Color(0xFFE0E0E0),
                       ),
-                      const SizedBox(height: 16),
-                      CustomLoginButton(
-                        onPressed: controller.isLoading.value
-                            ? null
-                            : controller.signInAsGuest,
-                        icon: const Icon(
-                          Icons.person_outline,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                        text: 'Continue as Guest',
-                        backgroundColor: Colors.white.withAlpha(51),
-                        textColor: Colors.white,
-                        borderColor: Colors.white.withAlpha(128),
-                      ),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 24),
                       if (controller.isLoading.value)
                         const CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
+                            Color(0xFF9C27B0),
                           ),
                         ),
                     ],
                   ),
                 ),
-                const Spacer(),
+                const Spacer(flex: 2),
+                Obx(
+                  () => TextButton(
+                    onPressed: controller.isLoading.value
+                        ? null
+                        : controller.signInAsGuest,
+                    child: const Text(
+                      'Continue as guest',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF666666),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
               ],
             ),
           ),
