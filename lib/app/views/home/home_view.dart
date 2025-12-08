@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/home_controller.dart';
 import '../../routes/app_routes.dart';
 import '../../widgets/category_chip.dart';
 import '../../widgets/news_card.dart';
@@ -10,6 +11,8 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(HomeController());
+
     return Scaffold(
       body: Column(
         children: [
@@ -82,101 +85,108 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      CategoryChip(label: 'Lokal', isSelected: true),
-                      CategoryChip(label: 'Politics', isSelected: false),
-                      CategoryChip(label: 'Tech', isSelected: false),
-                      CategoryChip(label: 'Sport', isSelected: false),
-                      CategoryChip(label: 'Entertainment', isSelected: false),
-                    ],
+                  child: Obx(
+                    () => Row(
+                      children: controller.categories.map((cat) {
+                        return CategoryChip(
+                          label: cat['label']!,
+                          isSelected:
+                              controller.selectedCategory.value == cat['key'],
+                          onTap: () => controller.selectCategory(cat['key']!),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                NewsCard(
-                  title:
-                      'Government announces new plan to support small businesses',
-                  source: 'The News',
-                  time: '2h ago',
-                  imageUrl: 'https://picsum.photos/400/200?random=1',
-                  isFeatured: true,
-                  onTap: () => _navigateToDetail(
-                    'Government announces new plan to support small businesses',
-                    'The News',
-                    '2h ago',
-                    'https://picsum.photos/400/200?random=1',
+            child: Obx(() {
+              if (controller.isLoading.value && controller.articles.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Color(0xFF9C27B0)),
+                );
+              }
+
+              if (controller.errorMessage.value.isNotEmpty) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 48,
+                          color: Color(0xFF999999),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          controller.errorMessage.value,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Color(0xFF666666)),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () => controller.refreshNews(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                NewsCard(
-                  title:
-                      'New technology is transforming the renewable energy sector',
-                  source: 'Daily Post',
-                  time: '4h ago',
-                  imageUrl: 'https://picsum.photos/400/200?random=2',
-                  onTap: () => _navigateToDetail(
-                    'New technology is transforming the renewable energy sector',
-                    'Daily Post',
-                    '4h ago',
-                    'https://picsum.photos/400/200?random=2',
+                );
+              }
+
+              if (controller.articles.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No news available',
+                    style: TextStyle(color: Color(0xFF666666)),
                   ),
+                );
+              }
+
+              return RefreshIndicator(
+                onRefresh: () => controller.refreshNews(),
+                color: const Color(0xFF9C27B0),
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: controller.articles.length,
+                  itemBuilder: (context, index) {
+                    final article = controller.articles[index];
+                    return NewsCard(
+                      title: article.title,
+                      source: article.source,
+                      time: article.timeAgo,
+                      imageUrl:
+                          article.imageUrl ??
+                          'https://picsum.photos/400/200?random=$index',
+                      isFeatured: index == 0,
+                      onTap: () => Get.toNamed(
+                        AppRoutes.newsDetail,
+                        arguments: {
+                          'title': article.title,
+                          'source': article.source,
+                          'time': article.timeAgo,
+                          'imageUrl':
+                              article.imageUrl ??
+                              'https://picsum.photos/400/200?random=$index',
+                          'description': article.description,
+                          'url': article.url,
+                        },
+                      ),
+                    );
+                  },
                 ),
-                NewsCard(
-                  title:
-                      'Political leaders meet to discuss recent policy changes',
-                  source: 'National Times',
-                  time: '6h ago',
-                  imageUrl: 'https://picsum.photos/400/200?random=3',
-                  onTap: () => _navigateToDetail(
-                    'Political leaders meet to discuss recent policy changes',
-                    'National Times',
-                    '6h ago',
-                    'https://picsum.photos/400/200?random=3',
-                  ),
-                ),
-                NewsCard(
-                  title:
-                      'Economy shows signs of recovery after a year of challenges',
-                  source: 'Global News',
-                  time: '12h ago',
-                  imageUrl: 'https://picsum.photos/400/200?random=4',
-                  onTap: () => _navigateToDetail(
-                    'Economy shows signs of recovery after a year of challenges',
-                    'Global News',
-                    '12h ago',
-                    'https://picsum.photos/400/200?random=4',
-                  ),
-                ),
-              ],
-            ),
+              );
+            }),
           ),
         ],
       ),
-    );
-  }
-
-  void _navigateToDetail(
-    String title,
-    String source,
-    String time,
-    String imageUrl,
-  ) {
-    Get.toNamed(
-      AppRoutes.newsDetail,
-      arguments: {
-        'title': title,
-        'source': source,
-        'time': time,
-        'imageUrl': imageUrl,
-      },
     );
   }
 }

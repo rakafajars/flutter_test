@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../routes/app_routes.dart';
+
 class NewsDetailView extends StatelessWidget {
   const NewsDetailView({super.key});
 
@@ -14,7 +16,7 @@ class NewsDetailView extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Get.toNamed(AppRoutes.chat),
         backgroundColor: const Color(0xFF9C27B0),
         child: const Icon(Icons.chat_bubble, color: Colors.white),
       ),
