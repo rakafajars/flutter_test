@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../controllers/auth_controller.dart';
+import '../../widgets/custom_login_button.dart';
 
 class LoginView extends GetView<AuthController> {
   const LoginView({super.key});
@@ -61,7 +62,7 @@ class LoginView extends GetView<AuthController> {
                 Obx(
                   () => Column(
                     children: [
-                      _buildLoginButton(
+                      CustomLoginButton(
                         onPressed: controller.isLoading.value
                             ? null
                             : controller.signInWithGoogle,
@@ -81,7 +82,7 @@ class LoginView extends GetView<AuthController> {
                         textColor: Colors.black87,
                       ),
                       const SizedBox(height: 16),
-                      _buildLoginButton(
+                      CustomLoginButton(
                         onPressed: controller.isLoading.value
                             ? null
                             : controller.signInAsGuest,
@@ -109,49 +110,6 @@ class LoginView extends GetView<AuthController> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLoginButton({
-    required VoidCallback? onPressed,
-    required Widget icon,
-    required String text,
-    required Color backgroundColor,
-    required Color textColor,
-    Color? borderColor,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 56,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: textColor,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: borderColor != null
-                ? BorderSide(color: borderColor)
-                : BorderSide.none,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            icon,
-            const SizedBox(width: 12),
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: textColor,
-              ),
-            ),
-          ],
         ),
       ),
     );
