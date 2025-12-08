@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../models/article.dart';
+import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
 import '../services/news_api_service.dart';
 
@@ -66,6 +67,7 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
       await _authService.signOut();
+      Get.offAllNamed(AppRoutes.login);
     } catch (e) {
       Get.snackbar(
         'Error',

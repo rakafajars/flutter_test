@@ -23,31 +23,12 @@ class AuthController extends GetxController {
   String? get userEmail => currentUser?.email;
   String? get userPhotoUrl => currentUser?.photoURL;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _authService.authStateChanges.listen(_handleAuthStateChange);
-  }
-
-  void _handleAuthStateChange(User? user) {
-    final currentRoute = Get.currentRoute;
-
-    if (user != null) {
-      if (currentRoute != AppRoutes.home) {
-        Get.offAllNamed(AppRoutes.home);
-      }
-    } else {
-      if (currentRoute != AppRoutes.login) {
-        Get.offAllNamed(AppRoutes.login);
-      }
-    }
-  }
-
   Future<void> signInWithGoogle() async {
     try {
       isLoading.value = true;
       errorMessage.value = null;
       await _authService.signInWithGoogle();
+      Get.offAllNamed(AppRoutes.home);
     } on FirebaseAuthException catch (e) {
       errorMessage.value = e.message ?? 'Authentication failed';
       Get.snackbar(
@@ -72,6 +53,7 @@ class AuthController extends GetxController {
       isLoading.value = true;
       errorMessage.value = null;
       await _authService.signInAnonymously();
+      Get.offAllNamed(AppRoutes.home);
     } on FirebaseAuthException catch (e) {
       errorMessage.value = e.message ?? 'Authentication failed';
       Get.snackbar(
