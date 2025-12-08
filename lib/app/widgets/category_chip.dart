@@ -22,13 +22,13 @@ class CategoryChip extends StatelessWidget {
           label: Text(
             label,
             style: TextStyle(
-              color: isSelected ? Colors.white : Colors.white70,
+              color: isSelected ? Colors.white : const Color(0xFF7B1FA2),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
             ),
           ),
           backgroundColor: isSelected
               ? const Color(0xFFFF9800)
-              : Colors.white.withAlpha(30),
+              : const Color(0xFFE1BEE7),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),

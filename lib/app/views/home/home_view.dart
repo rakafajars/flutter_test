@@ -61,25 +61,13 @@ class HomeView extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.search,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.logout,
-                              color: Colors.white,
-                              size: 28,
-                            ),
-                          ),
-                        ],
+                      IconButton(
+                        onPressed: () => controller.signOut(),
+                        icon: const Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                          size: 28,
+                        ),
                       ),
                     ],
                   ),

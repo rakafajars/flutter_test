@@ -1,9 +1,12 @@
 import 'package:get/get.dart';
 
 import '../models/article.dart';
+import '../services/auth_service.dart';
 import '../services/news_api_service.dart';
 
 class HomeController extends GetxController {
+  final AuthService _authService = Get.find<AuthService>();
+
   final NewsApiService _newsApiService = NewsApiService();
 
   final RxList<Article> articles = <Article>[].obs;
@@ -56,6 +59,21 @@ class HomeController extends GetxController {
   void selectCategory(String category) {
     if (selectedCategory.value != category) {
       fetchNews(category: category);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      isLoading.value = true;
+      await _authService.signOut();
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Sign out failed: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
     }
   }
 }

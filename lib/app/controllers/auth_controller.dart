@@ -90,19 +90,4 @@ class AuthController extends GetxController {
       isLoading.value = false;
     }
   }
-
-  Future<void> signOut() async {
-    try {
-      isLoading.value = true;
-      await _authService.signOut();
-    } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Sign out failed: ${e.toString()}',
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
 }
