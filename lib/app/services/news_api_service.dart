@@ -1,22 +1,18 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import '../core/network/dio_client.dart';
 import '../models/article.dart';
 
 class NewsApiService {
   static const String _baseUrl = 'https://newsapi.org/v2';
   static String get _apiKey => dotenv.env['NEWS_API_KEY'] ?? '';
 
-  final Dio _dio;
+  late final DioClient _client;
 
-  NewsApiService() : _dio = Dio(_createOptions());
-
-  static BaseOptions _createOptions() {
-    return BaseOptions(
+  NewsApiService() {
+    _client = DioClient(
       baseUrl: _baseUrl,
       queryParameters: {'apiKey': _apiKey},
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
     );
   }
 
@@ -26,28 +22,24 @@ class NewsApiService {
     int page = 1,
     int pageSize = 20,
   }) async {
-    try {
-      final response = await _dio.get(
-        '/top-headlines',
-        queryParameters: {
-          'country': country,
-          if (category != null) 'category': category,
-          'page': page,
-          'pageSize': pageSize,
-        },
-      );
+    final response = await _client.get(
+      '/top-headlines',
+      queryParameters: {
+        'country': country,
+        if (category != null) 'category': category,
+        'page': page,
+        'pageSize': pageSize,
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final articles = (response.data['articles'] as List)
-            .map((json) => Article.fromJson(json))
-            .where((article) => article.title.isNotEmpty)
-            .toList();
-        return articles;
-      }
-      throw Exception('Failed to load news');
-    } on DioException catch (e) {
-      throw _handleError(e);
+    if (response.statusCode == 200) {
+      final articles = (response.data['articles'] as List)
+          .map((json) => Article.fromJson(json))
+          .where((article) => article.title.isNotEmpty)
+          .toList();
+      return articles;
     }
+    throw Exception('Failed to load news');
   }
 
   Future<List<Article>> searchNews({
@@ -55,49 +47,23 @@ class NewsApiService {
     int page = 1,
     int pageSize = 20,
   }) async {
-    try {
-      final response = await _dio.get(
-        '/everything',
-        queryParameters: {
-          'q': query,
-          'page': page,
-          'pageSize': pageSize,
-          'sortBy': 'publishedAt',
-        },
-      );
+    final response = await _client.get(
+      '/everything',
+      queryParameters: {
+        'q': query,
+        'page': page,
+        'pageSize': pageSize,
+        'sortBy': 'publishedAt',
+      },
+    );
 
-      if (response.statusCode == 200) {
-        final articles = (response.data['articles'] as List)
-            .map((json) => Article.fromJson(json))
-            .where((article) => article.title.isNotEmpty)
-            .toList();
-        return articles;
-      }
-      throw Exception('Failed to search news');
-    } on DioException catch (e) {
-      throw _handleError(e);
+    if (response.statusCode == 200) {
+      final articles = (response.data['articles'] as List)
+          .map((json) => Article.fromJson(json))
+          .where((article) => article.title.isNotEmpty)
+          .toList();
+      return articles;
     }
-  }
-
-  Exception _handleError(DioException e) {
-    switch (e.type) {
-      case DioExceptionType.connectionTimeout:
-      case DioExceptionType.sendTimeout:
-      case DioExceptionType.receiveTimeout:
-        return Exception('Connection timeout. Please try again.');
-      case DioExceptionType.badResponse:
-        final statusCode = e.response?.statusCode;
-        final message = e.response?.data?['message'] ?? 'Unknown error';
-        if (statusCode == 401) {
-          return Exception('Invalid API key');
-        } else if (statusCode == 429) {
-          return Exception('Too many requests. Please try again later.');
-        }
-        return Exception('Error: $message');
-      case DioExceptionType.cancel:
-        return Exception('Request cancelled');
-      default:
-        return Exception('No internet connection');
-    }
+    throw Exception('Failed to search news');
   }
 }

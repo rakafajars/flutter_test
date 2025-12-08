@@ -166,19 +166,8 @@ class HomeView extends StatelessWidget {
                           article.imageUrl ??
                           'https://picsum.photos/400/200?random=$index',
                       isFeatured: index == 0,
-                      onTap: () => Get.toNamed(
-                        AppRoutes.newsDetail,
-                        arguments: {
-                          'title': article.title,
-                          'source': article.source,
-                          'time': article.timeAgo,
-                          'imageUrl':
-                              article.imageUrl ??
-                              'https://picsum.photos/400/200?random=$index',
-                          'description': article.description,
-                          'url': article.url,
-                        },
-                      ),
+                      onTap: () =>
+                          Get.toNamed(AppRoutes.newsDetail, arguments: article),
                     );
                   },
                 ),

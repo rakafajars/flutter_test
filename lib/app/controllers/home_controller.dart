@@ -35,7 +35,7 @@ class HomeController extends GetxController {
       }
 
       final result = await _newsApiService.getTopHeadlines(
-        country: 'id',
+        country: 'us',
         category: selectedCategory.value == 'general'
             ? null
             : selectedCategory.value,

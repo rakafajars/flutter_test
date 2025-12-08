@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../models/article.dart';
 import '../../routes/app_routes.dart';
 
 class NewsDetailView extends StatelessWidget {
@@ -8,11 +9,7 @@ class NewsDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map<String, dynamic>? ?? {};
-    final title = args['title'] ?? 'News Title';
-    final source = args['source'] ?? 'Source';
-    final time = args['time'] ?? '';
-    final imageUrl = args['imageUrl'] ?? '';
+    final article = Get.arguments as Article;
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -27,7 +24,7 @@ class NewsDetailView extends StatelessWidget {
             Stack(
               children: [
                 Image.network(
-                  imageUrl,
+                  article.imageUrl ?? 'https://picsum.photos/400/300',
                   height: 300,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -85,7 +82,7 @@ class NewsDetailView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    article.title,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -96,14 +93,15 @@ class NewsDetailView extends StatelessWidget {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Text(
-                        '$source • $time',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF999999),
+                      Expanded(
+                        child: Text(
+                          '${article.source} • ${article.timeAgo}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF999999),
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 12),
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
@@ -125,32 +123,34 @@ class NewsDetailView extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et euismod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF666666),
-                      height: 1.6,
+                  if (article.description.isNotEmpty) ...[
+                    Text(
+                      article.description,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFF666666),
+                        height: 1.6,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF666666),
-                      height: 1.6,
+                    const SizedBox(height: 16),
+                  ],
+                  if (article.url.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () => Get.toNamed(
+                        AppRoutes.webview,
+                        arguments: article.url,
+                      ),
+                      child: Text(
+                        'Read full article →',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.blue.shade700,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF666666),
-                      height: 1.6,
-                    ),
-                  ),
+                  ],
                 ],
               ),
             ),
