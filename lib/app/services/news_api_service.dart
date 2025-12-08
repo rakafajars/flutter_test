@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../models/article.dart';
 
 class NewsApiService {
   static const String _baseUrl = 'https://newsapi.org/v2';
-  static const String _apiKey = '21e4d2bebfc8490383d42736ba2fbe4e';
+  static String get _apiKey => dotenv.env['NEWS_API_KEY'] ?? '';
 
   final Dio _dio;
 
