@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NewsCard extends StatelessWidget {
   final String title;
@@ -48,11 +49,12 @@ class NewsCard extends StatelessWidget {
               Image.network(
                 imageUrl,
                 height: 200,
-                width: double.infinity,
+                width: Get.width,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 200,
                   color: Colors.grey[300],
+                  width: Get.width,
                   child: const Icon(Icons.image, size: 50),
                 ),
               ),
